@@ -1,0 +1,12 @@
+spring:
+  data:
+    mongodb:
+      username: swan
+      password: swan
+      host: localhost
+      port: 27017
+      database: learning_chat_app
+      authentication-database: admin
+
+server:
+    port: 8088
