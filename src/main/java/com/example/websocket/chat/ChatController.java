@@ -1,5 +1,6 @@
 package com.example.websocket.chat;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -23,17 +24,14 @@ public class ChatController {
     public void processMessage(
         @Payload ChatMessage chatMessage
     ) {
+        var now = new Date();
+        chatMessage.setTimestamp(now);
         ChatMessage savedMessage = chatMessageService.save(chatMessage);
         // john/queue/messages
         messagingTemplate.convertAndSendToUser(
             chatMessage.getRecipientId(), 
             "/queue/messages", 
-            ChatNotification.builder()
-                .id(savedMessage.getId())
-                .senderId(savedMessage.getSenderId())
-                .recipientId(savedMessage.getRecipientId())
-                .content(savedMessage.getContent())
-                .build()
+            savedMessage
         );
     }
 

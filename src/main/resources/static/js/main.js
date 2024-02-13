@@ -26,7 +26,10 @@ function connect(event) {
         const socket = new SockJS('/websocket-channel');
         stompClient = Stomp.over(socket);
 
-        stompClient.connect({}, onConnected, onError);
+        var header = {
+            "userId": nickname
+        }
+        stompClient.connect(header, onConnected, onError);
     }
     event.preventDefault();
 }
@@ -143,7 +146,6 @@ function sendMessage(event) {
             senderId: nickname,
             recipientId: selectedUserId,
             content: messageInput.value.trim(),
-            timestamp: new Date()
         };
         stompClient.send("/app/chat", {}, JSON.stringify(chatMessage));
         displayMessage(nickname, messageInput.value.trim());

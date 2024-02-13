@@ -31,7 +31,7 @@ public class ChatMessageService {
             senderId, 
             recipientId, 
             false
-        );
-        return chatId.map(repository::findByChatId).orElse(new ArrayList<>());
+        ).orElseThrow();
+        return repository.findByChatIdOrderByTimestampDesc(chatId).orElse(new ArrayList<>());
     }
 }
