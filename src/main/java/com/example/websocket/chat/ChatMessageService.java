@@ -33,6 +33,8 @@ public class ChatMessageService {
             false
         );
         if(chatId.isPresent()) {
+            var latest = repository.findFirstByChatIdOrderByTimestampDesc(chatId.get());
+            System.out.println("Latest "+ latest.get().getId());
             return repository.findByChatIdOrderByTimestampDesc(chatId.get()).orElse(new ArrayList<>());
         } else {
             return new ArrayList<>();
