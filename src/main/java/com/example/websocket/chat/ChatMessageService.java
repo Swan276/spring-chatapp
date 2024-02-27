@@ -31,7 +31,12 @@ public class ChatMessageService {
             senderId, 
             recipientId, 
             false
-        ).orElseThrow();
-        return repository.findByChatIdOrderByTimestampDesc(chatId).orElse(new ArrayList<>());
+        );
+        if(chatId.isPresent()) {
+            return repository.findByChatIdOrderByTimestampDesc(chatId.get()).orElse(new ArrayList<>());
+        } else {
+            return new ArrayList<>();
+        }
+        
     }
 }
