@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface ChatMessageRepository extends MongoRepository<ChatMessage, String> {
 
     Optional<List<ChatMessage>> findByChatIdOrderByTimestampDesc(String chatId);
+
+    Optional<ChatMessage> findFirstByChatIdOrderByTimestampDesc(String chatId);
 }
