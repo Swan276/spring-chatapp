@@ -1,6 +1,5 @@
 package com.example.websocket.chatroom;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -19,12 +18,9 @@ public class ChatRoomController {
     private final ChatRoomService service;
 
     @GetMapping("/chatRooms/{userId}")
-    public ResponseEntity<List<ChatRoom>> getChatRoomListByUser(
+    public ResponseEntity<List<ChatRoomResponse>> getChatRoomListByUser(
         @PathVariable("userId") String userId
     ) {
-        return ResponseEntity.ok(
-            service.getChatRoomListByUser(userId)
-                .orElse(new ArrayList<ChatRoom>())
-        );
+        return ResponseEntity.ok(service.getChatRoomListByUser(userId));
     }
 }

@@ -1,9 +1,12 @@
 package com.example.websocket.chatroom;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+
+import com.example.websocket.chat.ChatMessageRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,9 +15,23 @@ import lombok.RequiredArgsConstructor;
 public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
-    public Optional<List<ChatRoom>> getChatRoomListByUser(String userId) {
-        return chatRoomRepository.findAllBySenderId(userId);
+    public List<ChatRoomResponse> getChatRoomListByUser(String userId) {
+        var chatRoomResponseList = new ArrayList<ChatRoomResponse>();
+        var chatRoomList = chatRoomRepository.findAllBySenderId(userId);
+        if(chatRoomList.isPresent()) {
+            for (ChatRoom chatRoom : chatRoomList.get()) {
+                var chatRoomResponse = buildChatRoomResponse(chatRoom);
+                if (chatRoomResponse != null) {
+                    chatRoomResponseList.add(chatRoomResponse);
+                }
+            }
+        }
+
+        chatRoomResponseList.sort(new ChatRoomResponseComparator());
+
+        return chatRoomResponseList;
     }
     
     public Optional<String> getChatRoomId(
@@ -53,4 +70,18 @@ public class ChatRoomService {
 
         return chatId;
     }
+
+    private ChatRoomResponse buildChatRoomResponse(ChatRoom chatRoom) {
+        try {
+            var latestChatMessage = chatMessageRepository.findFirstByChatIdOrderByTimestampDesc(chatRoom.getChatId()).get();    
+            return ChatRoomResponse.fromChatRoom(
+                chatRoom, 
+                latestChatMessage
+            );
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }
+
+
