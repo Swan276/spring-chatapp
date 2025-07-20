@@ -1,5 +1,6 @@
 # Chat App Backend with Spring Boot
-Chat App backend server for my final year Capstone Project.
+Chat App backend server for my final year Capstone Project. \
+You can access the frontend mobile app together with the demo [here](https://github.com/Swan276/chatapp_flutter).
 
 ## Features
 - **User Authentication:** Authenticate users to ensure that there would be no unauthorized access on the users’ private information.
